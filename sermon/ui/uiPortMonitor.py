@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_Sermon(object):
+class Ui_PortMonitor(object):
     def setupUi(self, APP):
         APP.setObjectName("APP")
         APP.resize(388, 262)

@@ -1,7 +1,8 @@
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
-from uiMainWindow import Ui_MainWindow
-from portSelect import PortSelect
+from sermon.ui.uiMainWindow import Ui_MainWindow
+from sermon.portSelect import PortSelect
+from sermon.portMonitor import PortMonitor
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -10,9 +11,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.setIcon("./assets/icon.png")
 
-        self.centralWidget = PortSelect()
-        self.setCentralWidget(self.centralWidget)
+        self.portSelect = PortSelect()
+        self.setCentralWidget(self.portSelect)
 
+        # Finally
         self.show()
 
     

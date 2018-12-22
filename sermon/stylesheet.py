@@ -1,6 +1,6 @@
 # Application styleshet
-stylesheet = """
+StyleSheet = """
   QMainWindow{
-    background-color: blue;
+    background-color: #282c34;
   }
 """
