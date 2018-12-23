@@ -1,6 +1,6 @@
 # Sermon
 
-QT Serial communication interface
+Cross platform serial communication desktop interface
 
 # :construction: TODO
 - [x] Port listing

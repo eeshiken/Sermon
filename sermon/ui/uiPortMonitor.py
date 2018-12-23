@@ -1,9 +1,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_PortMonitor(object):
-    def setupUi(self, APP):
-        APP.setObjectName("APP")
-        APP.resize(388, 262)
+    def setupUi(self, OBJECT):
+        OBJECT.setObjectName("PortMonitor")
+        OBJECT.resize(388, 262)
         # Layout
         self.container = QtWidgets.QVBoxLayout(self)
         self.container.setObjectName("container")
@@ -12,8 +12,10 @@ class Ui_PortMonitor(object):
         self.outputLayout = QtWidgets.QHBoxLayout()
         self.outputLayout.setContentsMargins(10, 10, 10, 10)
         # Output window
-        self.messageOutput = QtWidgets.QTextEdit(APP)
+        self.messageOutput = QtWidgets.QTextEdit(OBJECT)
         self.messageOutput.setGeometry(QtCore.QRect(10, 40, 371, 211))
+        self.messageOutput.setReadOnly(True)
+        self.messageOutput.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.messageOutput.setObjectName("messageOutput")
         ### Add msg output to the output layout  
         self.outputLayout.addWidget(self.messageOutput) 
@@ -40,7 +42,7 @@ class Ui_PortMonitor(object):
         self.inputLayout.addWidget(self.messageInput)  
 
         # Send button
-        self.sendButton = QtWidgets.QPushButton(APP)
+        self.sendButton = QtWidgets.QPushButton(OBJECT)
         self.sendButton.setGeometry(QtCore.QRect(300, 10, 85, 27))
         self.sendButton.setObjectName("sendButton")
         ### Add input to input layout
@@ -49,9 +51,11 @@ class Ui_PortMonitor(object):
         ## Add input input layout
         self.container.addLayout(self.inputLayout)
 
-        self.retranslateUi(APP)
-        QtCore.QMetaObject.connectSlotsByName(APP)
+        self.retranslateUi(OBJECT)
+        QtCore.QMetaObject.connectSlotsByName(OBJECT)
     
-    def retranslateUi(self, APP):
+    def retranslateUi(self, OBJECT):
         _translate = QtCore.QCoreApplication.translate
-        APP.sendButton.setText(_translate("APP", "Send"))
+        OBJECT.sendButton.setText(_translate("PortMonitor", "Send"))
+        OBJECT.messageInput.setPlaceholderText(_translate("PortMonitor", "Enter message here..."))
+

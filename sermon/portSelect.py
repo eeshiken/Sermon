@@ -1,15 +1,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from sermon.ui.uiPortSelect import Ui_PortSelect
 from sermon.comms.devices import SerialDevices
+from sermon.portMonitor import PortMonitor
 
 
 class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
     serialDevices = None
+    selectedPort = None
+    portOpen = False
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.serialDevices = SerialDevices()
+
         self.updatePortList()
         self.__bindEventHandlers()
 
@@ -19,14 +23,32 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
         return
 
     def __openBtnClickedEvent(self):
-        print('Open')
-        # Selct port from combolist
-        # open port on the serial thread
-        # Show thread window
+        self.serialDevices.refreshPorts()
+
+        selectedPortDescription = self.portsComboList.itemText(self.portsComboList.currentIndex())
+        indexOfSelected = self.serialDevices.descriptions.index(selectedPortDescription)
+        self.serialDevices.devicePort = self.serialDevices.ports[indexOfSelected]
+
+        print(f'Open: {self.serialDevices.devicePort}, Index: {indexOfSelected}')
+
+        if self.portNotOpen():
+            self.portOpen = True
+            self.portMonitor = PortMonitor(self.serialDevices.devicePort)
+            self.portMonitor.show()
+            self.portMonitor.closed.connect(self.portMonitorClosed)
+        else:
+            print("Port already open")
+        return
+    
+    def closeEvent(self, event):
+        self.portMonitor.serialProcess.stop()
+
+    def portMonitorClosed(self):
+        self.portOpen = False
         return
     
     def __refreshBtnClickedEvent(self):
-        print('refresh')
+        print('Refresh')
         self.serialDevices.refreshPorts()
         self.updatePortList()
         return
@@ -37,6 +59,10 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
             self.portsComboList.addItems([portDescription])
         return
 
+    def portIsOpen(self):
+        return self.portOpen == True
+    def portNotOpen(self):
+        return self.portOpen == False
 
 if __name__ == "__main__":
     import sys

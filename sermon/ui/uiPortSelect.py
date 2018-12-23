@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_PortSelect(object):
     def setupUi(self, OBJECT):
         OBJECT.setObjectName('PortSelect')
-        OBJECT.setMaximumSize(400, 225)
+        # OBJECT.setMaximumSize(400, 225)
         OBJECT.setMinimumSize(350, 200)
         OBJECT.resize(450, 250)
 
