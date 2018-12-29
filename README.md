@@ -4,10 +4,10 @@ Cross platform serial communication desktop interface
 
 # :construction: TODO
 - [x] Port listing
+- [x] Comms options
 - [ ] Port Opening
 - [ ] Port read
 - [ ] Port write
-- [ ] Comms options
 
 ## Getting Started
 
