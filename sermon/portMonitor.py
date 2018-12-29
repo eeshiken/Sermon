@@ -1,33 +1,26 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from sermon.ui.uiPortMonitor import Ui_PortMonitor
-import time
 
-class PortMonitor(QtWidgets.QWidget, Ui_PortMonitor):
-    closed = QtCore.pyqtSignal()
-    devicePort = None
 
-    def __init__(self, port):
+class PortMonitor(QtWidgets.QDialog, Ui_PortMonitor):
+    def __init__(self, NAME):
         super().__init__()
         self.setupUi(self)
-        self.devicePort = port
-        self.setWindowTitle(self.devicePort)
-
-        self.setupSerialProcess()
-        # Start serial
-        # self.serialThread.start()
-
-    def setupSerialProcess(self):
-        self.serialThread = QtCore.QThread()
-        self.serialProcess = SerialProcess(self.devicePort)
-        self.serialProcess.moveToThread(self.serialThread)
-        self.serialThread.started.connect(self.serialProcess.run)
-        self.serialProcess.finished.connect(self.serialThread.quit)
-        self.serialThread.finished.connect(self.close)
+        self.fillLineEndings()
+        _tr = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_tr('PortMonitor', NAME))
+    
+    def fillLineEndings(self):
+        self.lineEndList.addItem('No line ending')
+        self.lineEndList.addItem('Newline \\n')
+        self.lineEndList.addItem('Newline & Return \\n\\r')
+        self.lineEndList.setCurrentIndex(1)
         return
 
-    def closeEvent(self, event):
-        self.serialProcess.stop()
-        while self.serialProcess.alive == True:
-            pass
-        self.closed.emit()
-        return
+
+if __name__ == "__main__":
+    import sys
+    APP = QtWidgets.QApplication(sys.argv)
+    MAIN = PortSelect()
+    MAIN.show()
+    sys.exit(APP.exec_())
