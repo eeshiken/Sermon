@@ -25,9 +25,13 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
     def __openBtnClickedEvent(self):
         self.serialDevices.refreshPorts()
 
-        selectedPortDescription = self.portsComboList.itemText(self.portsComboList.currentIndex())
-        indexOfSelected = self.serialDevices.descriptions.index(selectedPortDescription)
-        self.serialDevices.devicePort = self.serialDevices.ports[indexOfSelected]
+        try:
+            selectedPortDescription = self.portsComboList.itemText(self.portsComboList.currentIndex())
+            indexOfSelected = self.serialDevices.descriptions.index(selectedPortDescription)
+            self.serialDevices.devicePort = self.serialDevices.ports[indexOfSelected]
+        except ValueError:
+            print("Port selection error")
+            return
 
         print(f'Open: {self.serialDevices.devicePort}, Index: {indexOfSelected}')
 
@@ -61,8 +65,10 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
 
     def portIsOpen(self):
         return self.portOpen == True
+    
     def portNotOpen(self):
         return self.portOpen == False
+
 
 if __name__ == "__main__":
     import sys

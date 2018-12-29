@@ -17,6 +17,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Finally
         self.show()
 
+    def setIcon(self, file_name):
+        filePath = os.path.realpath(__file__)
+        scriptDir = os.path.dirname(filePath)
+        iconPath = scriptDir + os.path.sep + 'assets/icon.png'
+        self.setWindowIcon(QtGui.QIcon(iconPath))
+
+        return
+
+class SettingsDialog(QtWidgets.QMessageBox)
+
     
 if __name__ == "__main__":
     import sys
