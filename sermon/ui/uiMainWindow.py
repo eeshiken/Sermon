@@ -38,17 +38,6 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(_tr('MainWindow', 'About'))
         self.actionExit.setText(_tr('MainWindow', 'Exit'))
         return
-
-    def closeEvent(self, event):
-        reply = QtWidgets.QMessageBox.question(self, 
-            'Exit ?', "Are you sure to quit?",
-            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
-
-        if reply == QtWidgets.QMessageBox.Yes:
-            event.accept()
-        else:
-            event.ignore()
-        return
     
 
 if __name__ == "__main__":

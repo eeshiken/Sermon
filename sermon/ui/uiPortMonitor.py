@@ -1,24 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Console(QtWidgets.QPlainTextEdit):
-    def __init__(self, OBJECT):
-        super().__init__(OBJECT)
-        self.document().setMaximumBlockCount(1000)
-
-    def putData(self, data: QtCore.QByteArray):
-        self.insertPlainText(data)
-        self.bar = QtWidgets.QScrollBar().verticalScrollBar()
-        self.bar.setValue(self.bar.maximum())
-    
-    def setLocalEchoEnabled(self, set: bool):
-        self.localEchoEnabled = set
-    
-    def keyPressEvent(self, event):
-        print(event.key())
-    
-    def mousePressEvent(self, event):
-        self.setFocus()
-
 
 class Ui_PortMonitor(object):
     def setupUi(self, OBJECT):
@@ -26,13 +7,13 @@ class Ui_PortMonitor(object):
         OBJECT.resize(388, 262)
 
         # Output console
-        self.consoleOut = Console(OBJECT)
+        self.consoleOut = QtWidgets.QPlainTextEdit(OBJECT)
         self.consoleOut.setGeometry(QtCore.QRect(10, 40, 371, 211))
         self.consoleOut.setReadOnly(True)
         self.consoleOut.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
         # Input
-        self.dataIn = QtWidgets.QLineEdit()
+        self.dataIn = QtWidgets.QLineEdit(OBJECT)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.dataIn.setFont(font)
@@ -40,6 +21,7 @@ class Ui_PortMonitor(object):
         self.dataIn.setAcceptDrops(True)
         self.dataIn.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.dataIn.setFrame(True)
+        self.dataIn.setClearButtonEnabled(True)
         self.dataIn.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
 
         # Send button
@@ -51,6 +33,9 @@ class Ui_PortMonitor(object):
         # Line ending
         self.lineEndLabel = QtWidgets.QLabel(OBJECT)
         self.lineEndList = QtWidgets.QComboBox(OBJECT)
+
+        # Clear Console button
+        self.clearConsoleButton = QtWidgets.QPushButton(OBJECT)
 
         # UI STRUCTURE
         # Layouts
@@ -67,6 +52,7 @@ class Ui_PortMonitor(object):
         self.outputLayout.addWidget(self.consoleOut)
         self.inputLayout.addWidget(self.dataIn)
         self.inputLayout.addWidget(self.sendButton)
+        self.settingsLayout.addWidget(self.clearConsoleButton)
         self.settingsLayout.addItem(self.settingsSpacer)
         self.settingsLayout.addWidget(self.lineEndLabel)
         self.settingsLayout.addWidget(self.lineEndList)
@@ -82,5 +68,6 @@ class Ui_PortMonitor(object):
     def retranslateUi(self, OBJECT):
         _tr = QtCore.QCoreApplication.translate
         self.sendButton.setText(_tr('PortMonitor', 'Send'))
+        self.clearConsoleButton.setText(_tr('PortMonitor', 'Clear'))
         self.dataIn.setPlaceholderText(_tr('PortMonitor', 'Enter message here...'))
         self.lineEndLabel.setText(_tr('PortMonitor', ''))
