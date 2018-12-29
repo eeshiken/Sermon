@@ -4,10 +4,8 @@ class Ui_MainWindow(object):
     def setupUi(self, OBJECT):
         OBJECT.setObjectName('MainWindow')
         # OBJECT.setMaximumSize(400, 225)
-        OBJECT.setMinimumSize(350, 200)
+        OBJECT.setMinimumSize(350, 250)
         OBJECT.resize(450, 250)
-
-        self.statusbar = OBJECT.statusBar()
 
         self.createActions(OBJECT)
         self.createMenu(OBJECT)
@@ -17,17 +15,17 @@ class Ui_MainWindow(object):
         return
     
     def createActions(self, OBJECT):
-        self.aboutAction = QtWidgets.QAction(OBJECT)
-        self.exitAction = QtWidgets.QAction(OBJECT)
+        self.actionAbout = QtWidgets.QAction(OBJECT)
+        self.actionExit = QtWidgets.QAction(OBJECT)
         return
     
     def createMenu(self, OBJECT):
         self.menubar = OBJECT.menuBar()
 
         self.fileMenu = QtWidgets.QMenu(self.menubar)
-        self.fileMenu.addAction(self.aboutAction)
+        self.fileMenu.addAction(self.actionAbout)
         self.fileMenu.addSeparator()
-        self.fileMenu.addAction(self.exitAction)
+        self.fileMenu.addAction(self.actionExit)
 
         self.menubar.addAction(self.fileMenu.menuAction())
         return
@@ -36,8 +34,8 @@ class Ui_MainWindow(object):
         _tr = QtCore.QCoreApplication.translate
         OBJECT.setWindowTitle(_tr('MainWindow', 'Sermon: Serial Monitor'))
         self.fileMenu.setTitle(_tr('MainWindow', 'File'))
-        self.aboutAction.setText(_tr('MainWindow', 'About'))
-        self.exitAction.setText(_tr('MainWindow', 'Exit'))
+        self.actionAbout.setText(_tr('MainWindow', 'About'))
+        self.actionExit.setText(_tr('MainWindow', 'Exit'))
         return
 
     def closeEvent(self, event):
