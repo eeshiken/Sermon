@@ -9,6 +9,7 @@ class Ui_MainWindow(object):
 
         self.createActions(OBJECT)
         self.createMenu(OBJECT)
+        self.statusbar = OBJECT.statusBar()
 
         self.retranslateUi(OBJECT)
         QtCore.QMetaObject.connectSlotsByName(OBJECT)

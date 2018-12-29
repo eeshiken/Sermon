@@ -3,46 +3,36 @@ from terminal.ui.uiPortSelect import Ui_PortSelect
 
 
 class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
-    name = None
-    baudRate = None
-    dataBits = None
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.settings = {
+            'name': None,
+            'baudRate': None,
+            'dataBits': None
+        }
         self.serialInfo = QtSerialPort.QSerialPortInfo()
         self.fillPortsInfo()
         self.fillPortsParameters()
-    
-    def updateSettings(self):
-        pass
-        return
+        self.updateSettings()
     
     def fillPortsInfo(self):
+        emptyString = 'n/a'
         self.portsInfoList.clear()     
         for info in self.serialInfo.availablePorts():
-            description = info.description()
-            manufacturer = info.manufacturer()
-            serialNumber = info.serialNumber()
             pList = [
                 info.portName(),
-                info.description() if info.description() else "",
-                info.manufacturer() if info.manufacturer() else "",
-                info.serialNumber() if info.serialNumber() else "",
+                info.description() if info.description() else emptyString,
+                info.manufacturer() if info.manufacturer() else emptyString,
+                info.serialNumber() if info.serialNumber() else emptyString,
                 info.systemLocation(),
-                int(info.vendorIdentifier()) if info.hasVendorIdentifier() else "",
-                int(info.productIdentifier()) if info.hasProductIdentifier() else "",
+                int(info.vendorIdentifier()) if info.hasVendorIdentifier() else emptyString,
+                int(info.productIdentifier()) if info.hasProductIdentifier() else emptyString,
             ]
             self.portsInfoList.addItem(pList[0], pList)
-            print(pList)
         return
     
-    def fillPortsParameters(self):
-        stdRates = self.serialInfo.standardBaudRates()
-        MIN = 9600
-        MAX = 115200
-        rates = stdRates[stdRates.index(MIN):stdRates.index(MAX)+1]
-        
+    def fillPortsParameters(self):        
         self.baudRatesList.addItem('9600', QtSerialPort.QSerialPort.Baud9600)
         self.baudRatesList.addItem('19200', QtSerialPort.QSerialPort.Baud19200)
         self.baudRatesList.addItem('38400', QtSerialPort.QSerialPort.Baud38400)
@@ -56,6 +46,13 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
         self.dataBitsList.addItem('8', QtSerialPort.QSerialPort.Data8)
         self.dataBitsList.setCurrentIndex(3)
         return
+    
+    def updateSettings(self):
+        self.settings['name'] = self.portsInfoList.currentText()
+        self.settings['baudRate'] = self.baudRatesList.itemData( int(self.baudRatesList.currentIndex()) )
+        self.settings['dataBits'] = self.dataBitsList.itemData( int(self.dataBitsList.currentIndex()) )
+        return
+
 
 if __name__ == "__main__":
     import sys
