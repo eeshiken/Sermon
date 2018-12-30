@@ -20,11 +20,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         iconsPath = scriptDir+os.path.sep+'ui'+os.path.sep+'icons'+os.path.sep
 
         appIcon = QtGui.QIcon()
-        appIcon.addFile(iconsPath+'16x16.png', QtCore.QSize(16,16))
-        appIcon.addFile(iconsPath+'24x24.png', QtCore.QSize(24,24))
-        appIcon.addFile(iconsPath+'32x32.png', QtCore.QSize(32,32))
-        appIcon.addFile(iconsPath+'48x48.png', QtCore.QSize(48,48))
-        # appIcon.addFile(iconsPath+'98x98.png', QtCore.QSize(98,98))
+        appIcon.addFile(iconsPath+'128x128.png', QtCore.QSize(128,128))
+        appIcon.addFile(iconsPath+'256x256.png', QtCore.QSize(256,256))
         self.setWindowIcon(appIcon)
 
         self.showStatusMessage("...", 1000)
