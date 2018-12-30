@@ -6,15 +6,13 @@ class Ui_MainWindow(object):
         OBJECT.setObjectName('MainWindow')
         # OBJECT.setMaximumSize(400, 225)
         OBJECT.setMinimumSize(350, 250)
-        OBJECT.resize(350, 250)
+        OBJECT.resize(450, 250)
 
         self.createActions(OBJECT)
         self.createMenu(OBJECT)
         self.statusbar = OBJECT.statusBar()
 
-        ##
-        self.emojiCon()
-        ##
+        self.emojiCon() 
 
         self.retranslateUi(OBJECT)
         QtCore.QMetaObject.connectSlotsByName(OBJECT)
@@ -36,7 +34,7 @@ class Ui_MainWindow(object):
 
         self.fileMenu = QtWidgets.QMenu(self.menubar)
         self.fileMenu.addAction(self.actionExit)
-        self.fileMenu.addAction(self.actionEmojicon)
+        # self.fileMenu.addAction(self.actionEmojicon)
 
         self.helpMenu = QtWidgets.QMenu(self.menubar)
         self.helpMenu.addAction(self.actionAbout)

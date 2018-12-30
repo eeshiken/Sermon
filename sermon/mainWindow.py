@@ -3,7 +3,7 @@ from sermon.ui.uiMainWindow import Ui_MainWindow
 from sermon.portSelect import PortSelect
 from sermon.portMonitor import PortMonitor
 from emoji import emojize
-
+import os
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -15,6 +15,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.serialPort.errorOccurred.connect(self.handleSerialError)
         self.serialPort.readyRead.connect(self.readData)
+
+        scriptDir = os.path.dirname(os.path.realpath(__file__))
+        iconsPath = scriptDir+os.path.sep+'ui'+os.path.sep+'icons'+os.path.sep
+
+        appIcon = QtGui.QIcon()
+        appIcon.addFile(iconsPath+'16x16.png', QtCore.QSize(16,16))
+        appIcon.addFile(iconsPath+'24x24.png', QtCore.QSize(24,24))
+        appIcon.addFile(iconsPath+'32x32.png', QtCore.QSize(32,32))
+        appIcon.addFile(iconsPath+'48x48.png', QtCore.QSize(48,48))
+        # appIcon.addFile(iconsPath+'98x98.png', QtCore.QSize(98,98))
+        self.setWindowIcon(appIcon)
 
         self.showStatusMessage("...", 1000)
     

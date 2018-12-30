@@ -51,7 +51,7 @@ class Ui_PortSelect(object):
 
         # UI STRUCTURE
         self.container = QtWidgets.QVBoxLayout(OBJECT)
-        # self.container.setContentsMargins(30,30,30,30)
+        self.container.setContentsMargins(10,10,10,10)
         self.portsLabelLayout = QtWidgets.QHBoxLayout()
         self.portsViewLayout = QtWidgets.QHBoxLayout()
         self.settingsLayout = QtWidgets.QHBoxLayout()
