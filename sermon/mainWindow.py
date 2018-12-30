@@ -13,20 +13,30 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setCentralWidget(self.portSelect)
         self.initActionsConnections()
 
-        self.serialPort.errorOccurred.connect(self.handleError)
+        self.serialPort.errorOccurred.connect(self.handleSerialError)
         self.serialPort.readyRead.connect(self.readData)
 
-        self.showStatusMessage("Program started")
+        self.showStatusMessage("...", 1000)
     
     def about(self):
-        QtWidgets.QMessageBox(QtWidgets.QMessageBox.Icon.Information).about(self, 
+        QtWidgets.QMessageBox.information(self, 
             'About Sermon',
             '<b>Sermon</b> is a serial communication tool for embedded development'
         )
         return
-
+    
+    def aboutQt(self):
+        QtWidgets.QMessageBox.aboutQt(self, "About Qt")
+        return
+    
+    def handleEmojicon(self):
+        
+        return
+    
     def initActionsConnections(self):
         self.actionAbout.triggered.connect(self.about)
+        self.actionAboutQt.triggered.connect(self.aboutQt)
+        self.actionEmojicon.triggered.connect(self.handleEmojicon)
         self.actionExit.triggered.connect(self.close)
         
         self.portSelect.portsRefreshButton.clicked.connect(self.portSelect.fillPortsInfo)
@@ -46,8 +56,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.portMonitor.windowClosed.connect(self.closeSerialPort)
 
         # if (self.serialPort.open(QtCore.QIODevice.ReadWrite)):
-        self.showStatusMessage(f"Connected to {_s['name']}: {_s['baudRate']}, {_s['dataBits']}")
-        self.portMonitor.show()        
+        #     self.showStatusMessage(f"Connected to {_s['name']}: {_s['baudRate']}, {_s['dataBits']}")
+        #     self.portMonitor.show()        
         # else:
         #     QtWidgets.QMessageBox().critical(self, 'Error', self.serialPort.errorString())
         #     self.showStatusMessage('Open error')
@@ -61,9 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return
     
     def writeData(self):
-        # self.serialPort.write(data)
-
-        # Modify with line ending
+        # Modify input with appropriate line ending
         leo = self.portMonitor.lineEndingOption
         if leo == 1:
             le = "\n"
@@ -72,21 +80,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             le = ""
 
-        inStr = self.portMonitor.dataIn.text() + le
-        print(f'Input string: {inStr}')
-
-        self.portMonitor.putData(inStr)
-
-        # Clear Lineedit
-        self.portMonitor.dataIn.clear()
+        inData = self.portMonitor.dataInputBox.text() + le
+        # Write data to port
+        # self.serialPort.write(inData)
+        self.portMonitor.dataInputBox.clear()
         return
     
     def readData(self):
-        data = self.serialPort.readAll()
-        self.portMonitor.putData(data)
+        outData = self.serialPort.readAll()
+        self.portMonitor.putData(outData)
         return
     
-    def handleError(self, error: QtSerialPort.QSerialPort.SerialPortError):
+    def handleSerialError(self, error: QtSerialPort.QSerialPort.SerialPortError):
         if (error == QtSerialPort.QSerialPort.ResourceError):
             QtWidgets.QMessageBox().critical(
                 self,
@@ -107,9 +112,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 
         if reply == QtWidgets.QMessageBox.Yes:
-            if (self.portMonitor.isVisible()):
-                self.portMonitor.close()
-                self.closeSerialPort()
+            try:
+                if (self.portMonitor.isVisible()):
+                    self.portMonitor.close()
+                    self.closeSerialPort()
+            except AttributeError:
+                pass
             event.accept()
         else:
             event.ignore()

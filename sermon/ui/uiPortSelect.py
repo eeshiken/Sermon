@@ -11,6 +11,7 @@ class Ui_PortSelect(object):
         self.portsLabel = QtWidgets.QLabel()
         _font = QtGui.QFont()
         _font.setPointSize(12)
+        _font.setWeight(QtGui.QFont().Bold)
         self.portsLabel.setFont(_font)
         _sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         _sizePolicy.setHorizontalStretch(0)

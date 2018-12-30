@@ -13,16 +13,16 @@ class Ui_PortMonitor(object):
         self.consoleOut.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
         # Input
-        self.dataIn = QtWidgets.QLineEdit(OBJECT)
+        self.dataInputBox = QtWidgets.QLineEdit(OBJECT)
         font = QtGui.QFont()
         font.setPointSize(12)
-        self.dataIn.setFont(font)
-        self.dataIn.setMinimumSize(QtCore.QSize(0, 0))
-        self.dataIn.setAcceptDrops(True)
-        self.dataIn.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.dataIn.setFrame(True)
-        self.dataIn.setClearButtonEnabled(True)
-        self.dataIn.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.dataInputBox.setFont(font)
+        self.dataInputBox.setMinimumSize(QtCore.QSize(0, 0))
+        self.dataInputBox.setAcceptDrops(True)
+        self.dataInputBox.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.dataInputBox.setFrame(True)
+        self.dataInputBox.setClearButtonEnabled(True)
+        self.dataInputBox.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
 
         # Send button
         self.sendButton = QtWidgets.QPushButton(OBJECT)
@@ -50,7 +50,7 @@ class Ui_PortMonitor(object):
 
         # Add elements to layouts
         self.outputLayout.addWidget(self.consoleOut)
-        self.inputLayout.addWidget(self.dataIn)
+        self.inputLayout.addWidget(self.dataInputBox)
         self.inputLayout.addWidget(self.sendButton)
         self.settingsLayout.addWidget(self.clearConsoleButton)
         self.settingsLayout.addItem(self.settingsSpacer)
@@ -69,5 +69,5 @@ class Ui_PortMonitor(object):
         _tr = QtCore.QCoreApplication.translate
         self.sendButton.setText(_tr('PortMonitor', 'Send'))
         self.clearConsoleButton.setText(_tr('PortMonitor', 'Clear'))
-        self.dataIn.setPlaceholderText(_tr('PortMonitor', 'Enter message here...'))
+        self.dataInputBox.setPlaceholderText(_tr('PortMonitor', 'Enter message here...'))
         self.lineEndLabel.setText(_tr('PortMonitor', ''))
