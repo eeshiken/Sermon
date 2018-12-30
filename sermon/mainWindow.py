@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
 from sermon.ui.uiMainWindow import Ui_MainWindow
 from sermon.portSelect import PortSelect
 from sermon.portMonitor import PortMonitor
-
+from emoji import emojize
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -30,7 +30,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return
     
     def handleEmojicon(self):
-        
+        moj = f':{self.getRandomEmoji()}:'
+        self.showStatusMessage(moj)
         return
     
     def initActionsConnections(self):
@@ -57,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # if (self.serialPort.open(QtCore.QIODevice.ReadWrite)):
         #     self.showStatusMessage(f"Connected to {_s['name']}: {_s['baudRate']}, {_s['dataBits']}")
-        #     self.portMonitor.show()        
+        self.portMonitor.show()        
         # else:
         #     QtWidgets.QMessageBox().critical(self, 'Error', self.serialPort.errorString())
         #     self.showStatusMessage('Open error')

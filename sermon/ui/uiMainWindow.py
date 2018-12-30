@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from random import randrange
 
 class Ui_MainWindow(object):
     def setupUi(self, OBJECT):
@@ -35,7 +36,7 @@ class Ui_MainWindow(object):
 
         self.fileMenu = QtWidgets.QMenu(self.menubar)
         self.fileMenu.addAction(self.actionExit)
-        # self.fileMenu.addAction(self.actionEmojicon)
+        self.fileMenu.addAction(self.actionEmojicon)
 
         self.helpMenu = QtWidgets.QMenu(self.menubar)
         self.helpMenu.addAction(self.actionAbout)
@@ -52,22 +53,22 @@ class Ui_MainWindow(object):
         self.fileMenu.setTitle(_tr('MainWindow', 'File'))
         self.helpMenu.setTitle(_tr('MainWindow', 'Help'))
         self.actionAbout.setText(_tr('MainWindow', 'About'))
-        self.actionAbout.setShortcut(_tr('MainWindow', 'Ctrl+A'))
         self.actionAboutQt.setText(_tr('MainWindow', 'About Qt'))
-        self.actionAboutQt.setShortcut(_tr('MainWindow', 'Ctrl+Shift+A'))
         self.actionExit.setText(_tr('MainWindow', 'Exit'))
-        self.actionExit.setShortcut(_tr('MainWindow', 'Ctrl+E'))
+        self.actionEmojicon.setText(_tr('MainWindow', 'Emojicon'))
         return
     
     def emojiCon(self):
         self.emojilib = [
-            "lipstick",
-            "memo"
+            'memo',
+            'ribbon',
+            'lipstick',
+            'construction'
         ]
         return
     
     def getRandomEmoji(self) -> str:
-        index = random.randrange(len(self.emojilib))
+        index = randrange(len(self.emojilib))
         return self.emojilib[index]
     
 
