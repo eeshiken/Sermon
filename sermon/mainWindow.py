@@ -37,15 +37,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         QtWidgets.QMessageBox.aboutQt(self, "About Qt")
         return
     
-    def handleEmojicon(self):
-        moj = f':{self.getRandomEmoji()}:'
-        self.showStatusMessage(moj)
+    def handleUnicode(self):
+        code = self.getRandomUnicode()
+        self.showStatusMessage(code)
         return
     
     def initActionsConnections(self):
         self.actionAbout.triggered.connect(self.about)
         self.actionAboutQt.triggered.connect(self.aboutQt)
-        self.actionEmojicon.triggered.connect(self.handleEmojicon)
+        self.actionUnicode.triggered.connect(self.handleUnicode)
         self.actionExit.triggered.connect(self.close)
         
         self.portSelect.portsRefreshButton.clicked.connect(self.portSelect.fillPortsInfo)

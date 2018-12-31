@@ -12,8 +12,6 @@ class Ui_MainWindow(object):
         self.createMenu(OBJECT)
         self.statusbar = OBJECT.statusBar()
 
-        self.emojiCon() 
-
         self.retranslateUi(OBJECT)
         QtCore.QMetaObject.connectSlotsByName(OBJECT)
         return
@@ -25,8 +23,8 @@ class Ui_MainWindow(object):
         self.actionAboutQt.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.SHIFT + QtCore.Qt.Key_A))
         self.actionExit = QtWidgets.QAction(OBJECT)
         self.actionExit.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_E))
-        self.actionEmojicon = QtWidgets.QAction(OBJECT)
-        self.actionEmojicon.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y))
+        self.actionUnicode = QtWidgets.QAction(OBJECT)
+        self.actionUnicode.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y))
         return
     
     def createMenu(self, OBJECT):
@@ -34,7 +32,7 @@ class Ui_MainWindow(object):
 
         self.fileMenu = QtWidgets.QMenu(self.menubar)
         self.fileMenu.addAction(self.actionExit)
-        # self.fileMenu.addAction(self.actionEmojicon)
+        self.fileMenu.addAction(self.actionUnicode)
 
         self.helpMenu = QtWidgets.QMenu(self.menubar)
         self.helpMenu.addAction(self.actionAbout)
@@ -53,21 +51,13 @@ class Ui_MainWindow(object):
         self.actionAbout.setText(_tr('MainWindow', 'About'))
         self.actionAboutQt.setText(_tr('MainWindow', 'About Qt'))
         self.actionExit.setText(_tr('MainWindow', 'Exit'))
-        self.actionEmojicon.setText(_tr('MainWindow', 'Emojicon'))
+        self.actionUnicode.setText(_tr('MainWindow', 'Unicode'))
         return
     
-    def emojiCon(self):
-        self.emojilib = [
-            'memo',
-            'ribbon',
-            'lipstick',
-            'construction'
-        ]
-        return
-    
-    def getRandomEmoji(self) -> str:
-        index = randrange(len(self.emojilib))
-        return self.emojilib[index]
+    def getRandomUnicode(self) -> str:
+        CODE_LENGTH = randrange(10)
+        hexCode = [chr(randrange(945,975)) for code in range(CODE_LENGTH)]
+        return ''.join(hexCode)
     
 
 if __name__ == "__main__":
