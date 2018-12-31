@@ -6,7 +6,7 @@ class Ui_MainWindow(object):
         OBJECT.setObjectName('MainWindow')
         # OBJECT.setMaximumSize(400, 225)
         OBJECT.setMinimumSize(350, 250)
-        OBJECT.resize(450, 250)
+        OBJECT.resize(450, 300)
 
         self.createActions(OBJECT)
         self.createMenu(OBJECT)

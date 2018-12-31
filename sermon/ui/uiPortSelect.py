@@ -21,6 +21,10 @@ class Ui_PortSelect(object):
 
         # Port list displayed as a combobox        
         self.portsInfoList = QtWidgets.QComboBox()
+        _font = QtGui.QFont()
+        _font.setPointSize(24)
+        _font.setWeight(QtGui.QFont().Thin)
+        self.portsInfoList.setFont(_font)
         _sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         _sizePolicy.setHorizontalStretch(0)
         _sizePolicy.setVerticalStretch(0)
@@ -29,6 +33,11 @@ class Ui_PortSelect(object):
 
         # Open button
         self.portOpenButton = QtWidgets.QPushButton()
+        _sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        _sizePolicy.setHorizontalStretch(0)
+        _sizePolicy.setVerticalStretch(0)
+        _sizePolicy.setHeightForWidth(self.portOpenButton.sizePolicy().hasHeightForWidth())
+        self.portOpenButton.setSizePolicy(_sizePolicy)
 
         # Refresh button
         self.portsRefreshButton = QtWidgets.QPushButton()
@@ -51,14 +60,16 @@ class Ui_PortSelect(object):
 
         # UI STRUCTURE
         self.container = QtWidgets.QVBoxLayout(OBJECT)
-        self.container.setContentsMargins(10,10,10,10)
+        self.container.setContentsMargins(20,20,20,20)
         self.portsLabelLayout = QtWidgets.QHBoxLayout()
+        self.portsLabelLayout.setContentsMargins(0,0,0,0) # LTRB
         self.portsViewLayout = QtWidgets.QHBoxLayout()
+        self.portsViewLayout.setContentsMargins(0,0,0,0) # LTRB
         self.settingsLayout = QtWidgets.QHBoxLayout()
         self.settingsLayout.setContentsMargins(0,10,0,0) # LTRB
 
         self.portsRefreshLayout = QtWidgets.QHBoxLayout()
-        self.portsRefreshLayout.setContentsMargins(0,10,0,0) # LTRB
+        self.portsRefreshLayout.setContentsMargins(0,0,0,0) # LTRB
 
         # Add the created ui objects to their respective layout items
         self.portsLabelLayout.addWidget(self.portsLabel)
