@@ -1,9 +1,71 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
-from sermon.ui.uiMainWindow import Ui_MainWindow
-from sermon.portSelect import PortSelect
-from sermon.portMonitor import PortMonitor
-from emoji import emojize
 import os
+from random import randrange
+
+from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
+from sermon.resources import resourcePath
+from sermon.interface.portSelect import PortSelect
+from sermon.interface.portMonitor import PortMonitor
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, OBJECT):
+        OBJECT.setObjectName('MainWindow')
+        # OBJECT.setMaximumSize(400, 225)
+        OBJECT.setMinimumSize(350, 250)
+        OBJECT.resize(450, 300)
+
+        self.createActions(OBJECT)
+        self.createMenu(OBJECT)
+        self.statusbar = OBJECT.statusBar()
+
+        self.retranslateUi(OBJECT)
+        QtCore.QMetaObject.connectSlotsByName(OBJECT)
+        return
+    
+    def createActions(self, OBJECT):
+        self.actionAbout = QtWidgets.QAction(OBJECT)
+        self.actionAbout.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_A))
+        self.actionAboutQt = QtWidgets.QAction(OBJECT)
+        self.actionAboutQt.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.SHIFT + QtCore.Qt.Key_A))
+        self.actionExit = QtWidgets.QAction(OBJECT)
+        self.actionExit.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_E))
+        self.actionUnicode = QtWidgets.QAction(OBJECT)
+        self.actionUnicode.setShortcuts(QtGui.QKeySequence(QtCore.Qt.CTRL + QtCore.Qt.Key_Y))
+        return
+    
+    def createMenu(self, OBJECT):
+        self.menubar = OBJECT.menuBar()
+
+        self.fileMenu = QtWidgets.QMenu(self.menubar)
+        self.fileMenu.addAction(self.actionExit)
+        self.fileMenu.addAction(self.actionUnicode)
+
+        self.helpMenu = QtWidgets.QMenu(self.menubar)
+        self.helpMenu.addAction(self.actionAbout)
+        self.helpMenu.addAction(self.actionAboutQt)
+
+        self.menubar.addAction(self.fileMenu.menuAction())
+        self.menubar.addAction(self.helpMenu.menuAction())
+    
+        return
+
+    def retranslateUi(self, OBJECT):
+        _tr = QtCore.QCoreApplication.translate
+        OBJECT.setWindowTitle(_tr('MainWindow', 'Sermon: Serial Monitor'))
+        self.fileMenu.setTitle(_tr('MainWindow', 'File'))
+        self.helpMenu.setTitle(_tr('MainWindow', 'Help'))
+        self.actionAbout.setText(_tr('MainWindow', 'About'))
+        self.actionAboutQt.setText(_tr('MainWindow', 'About Qt'))
+        self.actionExit.setText(_tr('MainWindow', 'Exit'))
+        self.actionUnicode.setText(_tr('MainWindow', 'Unicode'))
+        return
+    
+    def getRandomUnicode(self) -> str:
+        CODE_LENGTH = randrange(10)
+        hexCode = [chr(randrange(945,975)) for code in range(CODE_LENGTH)]
+        return ''.join(hexCode)
+
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -16,12 +78,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.serialPort.errorOccurred.connect(self.handleSerialError)
         self.serialPort.readyRead.connect(self.readData)
 
-        scriptDir = os.path.dirname(os.path.realpath(__file__))
-        iconsPath = scriptDir+os.path.sep+'ui'+os.path.sep+'icons'+os.path.sep
-
         appIcon = QtGui.QIcon()
-        appIcon.addFile(iconsPath+'128x128.png', QtCore.QSize(128,128))
-        appIcon.addFile(iconsPath+'256x256.png', QtCore.QSize(256,256))
+        appIcon.addFile(resourcePath('128x128'), QtCore.QSize(128,128))
+        appIcon.addFile(resourcePath('256x256'), QtCore.QSize(256,256))
         self.setWindowIcon(appIcon)
 
         self.showStatusMessage("...", 1000)
@@ -58,6 +117,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.serialPort.setPortName(_s['name'])
         self.serialPort.setBaudRate(_s['baudRate'])
         self.serialPort.setDataBits(_s['dataBits'])
+        self.serialPort.setParity(_s['parity'])
+        self.serialPort.setStopBits(_s['stopBits'])
+        self.serialPort.setFlowControl(_s['flowControl'])
 
         self.portMonitor = PortMonitor(f"{_s['name']} | {_s['baudRate']}")
         self.portMonitor.sendButton.clicked.connect(self.writeData)
