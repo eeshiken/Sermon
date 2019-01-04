@@ -152,8 +152,9 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
         return
     
     def updateSettings(self):
-        self.settings['name'] = self.portsInfoList.currentText()
-        self.settings['port'] = self.portsInfoList.itemData( int(self.portsInfoList.currentIndex()) )
+        self.settings['portInfo'] = self.portsInfoList.itemData( int(self.portsInfoList.currentIndex()) )
+        self.settings['name'] = self.settings['portInfo'][4]
+
         self.settings['baudRate'] = self.baudRatesList.itemData( int(self.baudRatesList.currentIndex()) )
         self.settings['dataBits'] = self.dataBitsList.itemData( int(self.dataBitsList.currentIndex()) )
         self.settings['parity'] = QtSerialPort.QSerialPort.NoParity
