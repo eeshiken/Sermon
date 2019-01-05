@@ -111,6 +111,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.portSelect.updateSettings()
         _s = self.portSelect.settings
 
+        # Fast check if no devices are connected
+        if _s['name'] == 'n/a':
+            QtWidgets.QMessageBox.information(self,
+                'Port Info',
+                'No devices found!'
+            )
+            return
+
         self.serialPort = QtSerialPort.QSerialPort()
         self.serialPort.setPortName(_s['name'])
         self.serialPort.setBaudRate(_s['baudRate'])
@@ -118,8 +126,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.serialPort.setParity(_s['parity'])
         self.serialPort.setStopBits(_s['stopBits'])
         self.serialPort.setFlowControl(_s['flowControl'])
-        # Setup error handler
-        self.serialPort.errorOccurred.connect(self.handleSerialError)
 
         # Create communication window and connect signals
         self.portMonitor = PortMonitor(f"{_s['name']} | {_s['baudRate']}")
@@ -128,15 +134,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.portMonitor.windowClosed.connect(self.closeSerialPort)
 
         if self.serialPort.open(QtCore.QIODevice.ReadWrite):
-            self.serialPort.setDataTerminalReady(True)
-            if not self.serialPort.isDataTerminalReady():
-                self.showStatusMessage("Serial error occured")
             self.serialPort.readyRead.connect(self.onSerialReadData)
+            self.portMonitor.consoleOut.clear()
             self.portMonitor.show()
             self.showStatusMessage(f"Connected to {_s['name']}: {_s['baudRate']}, {_s['dataBits']}")
         else:
             msg = f"Cannot connect to device on port {_s['name']}"
-            self.showStatusMessage(msg)
+            self.handleSerialError(msg)
         return
 
     def closeSerialPort(self):
@@ -151,26 +155,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if leo == 1:
             le = "\n"
         elif leo == 2:
-            le = "\n\r"
+            le = "\r\n"
         else:
             le = ""
 
         inData = self.portMonitor.dataInputBox.text() + le
         # Write data to port
-        # self.serialPort.write(inData)
+        self.serialPort.write(inData)
         self.portMonitor.dataInputBox.clear()
         return
     
     def onSerialReadData(self):
         outData = bytes(self.serialPort.readAll())
-        self.portMonitor.putData(outData)
+        strData = outData.decode('utf-8')
+        self.portMonitor.putData(strData)
         return
     
     def handleSerialError(self, error: QtSerialPort.QSerialPort.SerialPortError):
         QtWidgets.QMessageBox().critical(
             self,
-            'Critical Error',
-            self.serialPort.errorString()
+            'Serial Error',
+            f'{error}\nError Code: {self.serialPort.error()}'
         )
         self.closeSerialPort()
         return
@@ -180,7 +185,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return
     
     def closeEvent(self, event: QtGui.QCloseEvent):
-
         reply = QtWidgets.QMessageBox.question(self, 
             'Exit ?', "Are you sure to quit?",
             QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)

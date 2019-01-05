@@ -104,8 +104,8 @@ class PortMonitor(QtWidgets.QDialog, Ui_PortMonitor):
         self.lineEndingOption = self.lineEndList.itemData(int(self.lineEndList.currentData()))
         return
 
-    def putData(self, data: QtCore.QByteArray):
-        self.consoleOut.insertPlainText(str(data))
+    def putData(self, data: str):
+        self.consoleOut.insertPlainText(data)
         self.bar = self.consoleOut.verticalScrollBar()
         self.bar.setValue(self.bar.maximum())
     

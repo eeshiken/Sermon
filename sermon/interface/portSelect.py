@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
+from serial.tools.list_ports import comports
 
 
 class Ui_PortSelect(object):
@@ -121,22 +122,19 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
         self.updateSettings()
     
     def fillPortsInfo(self):
-        emptyString = 'n/a'
-        self.portsInfoList.clear()     
-        for info in self.serialInfo.availablePorts():
-            pList = [
-                info.portName(),
-                info.description() if info.description() else emptyString,
-                info.manufacturer() if info.manufacturer() else emptyString,
-                info.serialNumber() if info.serialNumber() else emptyString,
-                info.systemLocation(),
-                int(info.vendorIdentifier()) if info.hasVendorIdentifier() else emptyString,
-                int(info.productIdentifier()) if info.hasProductIdentifier() else emptyString,
-            ]
-            self.portsInfoList.addItem(pList[0], pList)
+        self.portsInfoList.clear()
+        try:
+            ports, descriptions, hwid = zip(*comports())
+            for i in range(len(ports)):
+                portInfo = [ports[i], descriptions[i], hwid[i]]
+                self.portsInfoList.addItem(descriptions[i], portInfo)
+        except ValueError:
+            emptyPorts = ['n/a','n/a','n/a']
+            self.portsInfoList.addItem('NADA', emptyPorts)
+            
         return
     
-    def fillPortsParameters(self):        
+    def fillPortsParameters(self):
         self.baudRatesList.addItem('9600', QtSerialPort.QSerialPort.Baud9600)
         self.baudRatesList.addItem('19200', QtSerialPort.QSerialPort.Baud19200)
         self.baudRatesList.addItem('38400', QtSerialPort.QSerialPort.Baud38400)
@@ -153,7 +151,7 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
     
     def updateSettings(self):
         self.settings['portInfo'] = self.portsInfoList.itemData( int(self.portsInfoList.currentIndex()) )
-        self.settings['name'] = self.settings['portInfo'][4]
+        self.settings['name'] = self.settings['portInfo'][0]
 
         self.settings['baudRate'] = self.baudRatesList.itemData( int(self.baudRatesList.currentIndex()) )
         self.settings['dataBits'] = self.dataBitsList.itemData( int(self.dataBitsList.currentIndex()) )
