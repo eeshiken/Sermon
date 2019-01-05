@@ -8,7 +8,7 @@ Cross platform serial communication desktop interface
 - [x] Port Opening
 - [x] Port read
 - [x] Port write
-- [ ] Formatting output
+- [x] Formatting output
 - [ ] Styling
 
 ## Getting Started

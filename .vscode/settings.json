@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/home/eeshiken/.virtualenvs/sermon/bin/python",
+    "python.pythonPath": "~/.virtualenvs/sermon/bin/python",
     "editor.tabSize": 4
 }
