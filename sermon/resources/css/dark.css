@@ -1,0 +1,5 @@
+QWidget, QApplication, QDialog,
+QStatusBar, QMenu {
+    background: #21252b;
+    color: #9da5b4;
+}

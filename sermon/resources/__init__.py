@@ -12,3 +12,7 @@ def resourcePath(name, resource_dir="images/"):
 
 def loadImage(name):
     return QtGui.QPixmap(resourcePath(name))
+
+def loadStyleSheet(name):
+    # Opens the file and returns all the contents in string form
+    return resource_string(__name__, "css/" + name).decode('utf8')
