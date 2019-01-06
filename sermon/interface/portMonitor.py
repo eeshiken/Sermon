@@ -14,6 +14,7 @@ class Ui_PortMonitor(object):
 
         # Input
         self.dataInputBox = QtWidgets.QLineEdit(OBJECT)
+        self.dataInputBox.setFrame(False)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.dataInputBox.setFont(font)
@@ -26,6 +27,7 @@ class Ui_PortMonitor(object):
 
         # Send button
         self.sendButton = QtWidgets.QPushButton(OBJECT)
+        # self.sendButton.setFlat(True)
         self.sendButton.setGeometry(QtCore.QRect(300, 10, 85, 27))
         
         self.settingsSpacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
@@ -96,7 +98,7 @@ class PortMonitor(QtWidgets.QDialog, Ui_PortMonitor):
     def fillLineEndings(self):
         self.lineEndList.addItem('No line ending', 0)
         self.lineEndList.addItem('Newline \\n', 1)
-        self.lineEndList.addItem('Newline & Return \\n\\r', 2)
+        self.lineEndList.addItem('Newline & Return \\r\\n', 2)
         self.lineEndList.setCurrentIndex(1)
         return
     

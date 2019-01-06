@@ -1,13 +1,11 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, QtSerialPort
+from PyQt5 import QtCore, QtGui, QtWidgets
 from serial.tools.list_ports import comports
-
+from sermon.interface.portSettings import PortSettings
 
 class Ui_PortSelect(object):
     def setupUi(self, OBJECT):
         OBJECT.setObjectName('PortSelect')
-        # OBJECT.setMaximumSize(400, 225)
         OBJECT.setMinimumSize(350, 200)
-        # OBJECT.resize(450, 250)
 
         # Ports label
         self.portsLabel = QtWidgets.QLabel()
@@ -53,12 +51,7 @@ class Ui_PortSelect(object):
         self.settingsSpacer = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
 
         # Baudrate
-        self.baudRatesLabel = QtWidgets.QLabel()
-        self.baudRatesList = QtWidgets.QComboBox()
-
-        # DataBits
-        self.dataBitsLabel = QtWidgets.QLabel()
-        self.dataBitsList = QtWidgets.QComboBox()
+        self.settingsButton = QtWidgets.QPushButton()
 
         # UI STRUCTURE
         self.container = QtWidgets.QVBoxLayout(OBJECT)
@@ -77,12 +70,9 @@ class Ui_PortSelect(object):
         self.portsLabelLayout.addWidget(self.portsLabel)
         self.portsViewLayout.addWidget(self.portsInfoList)
         self.portsViewLayout.addWidget(self.portOpenButton)
-        self.settingsLayout.addItem(self.settingsSpacer)
-        self.settingsLayout.addWidget(self.dataBitsLabel)
-        self.settingsLayout.addWidget(self.dataBitsList)
-        self.settingsLayout.addWidget(self.baudRatesLabel)
-        self.settingsLayout.addWidget(self.baudRatesList)
         self.portsRefreshLayout.addWidget(self.portsRefreshButton)
+        self.settingsLayout.addItem(self.settingsSpacer)
+        self.settingsLayout.addWidget(self.settingsButton)
         
         # Add the layouts to the container layout
         self.container.addLayout(self.portsLabelLayout)
@@ -92,35 +82,38 @@ class Ui_PortSelect(object):
 
         self.retranslateUi(OBJECT)
         QtCore.QMetaObject.connectSlotsByName(OBJECT)
-
         return
 
     def retranslateUi(self, OBJECT):
         _tr = QtCore.QCoreApplication.translate
-
         self.portsLabel.setText(_tr('PortSelect', 'Available Ports'))
         self.portOpenButton.setText(_tr('PortSelect', 'Connect'))
         self.portsRefreshButton.setText(_tr('PortSelect', 'Refresh'))
-        self.baudRatesLabel.setText(_tr('PortSelect', 'Baudrate'))
-        self.dataBitsLabel.setText(_tr('PortSelect', 'Databits'))
-
+        self.settingsButton.setText(_tr('PortSelect', 'Settings'))
         return
 
 
 class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
+    settingsUpdateSignal = QtCore.pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.portInfo = {
+            'all': None,
+            'name': None,
+        }
         self.settings = {
             'name': None,
+            'portInfo': None,
             'baudRate': None,
-            'dataBits': None
+            'dataBits': None,
+            'parity': None,
+            'stopBits': None,
+            'flowControl': None
         }
-        self.serialInfo = QtSerialPort.QSerialPortInfo()
         self.fillPortsInfo()
-        self.fillPortsParameters()
-        self.updateSettings()
-    
+
     def fillPortsInfo(self):
         self.portsInfoList.clear()
         try:
@@ -134,28 +127,16 @@ class PortSelect(QtWidgets.QDialog, Ui_PortSelect):
             
         return
     
-    def fillPortsParameters(self):
-        self.baudRatesList.addItem('9600', QtSerialPort.QSerialPort.Baud9600)
-        self.baudRatesList.addItem('19200', QtSerialPort.QSerialPort.Baud19200)
-        self.baudRatesList.addItem('38400', QtSerialPort.QSerialPort.Baud38400)
-        self.baudRatesList.addItem('57600', QtSerialPort.QSerialPort.Baud57600)
-        self.baudRatesList.addItem('115200', QtSerialPort.QSerialPort.Baud115200)
-        self.baudRatesList.setCurrentIndex(0)
-
-        self.dataBitsList.addItem('5', QtSerialPort.QSerialPort.Data5)
-        self.dataBitsList.addItem('6', QtSerialPort.QSerialPort.Data6)
-        self.dataBitsList.addItem('7', QtSerialPort.QSerialPort.Data7)
-        self.dataBitsList.addItem('8', QtSerialPort.QSerialPort.Data8)
-        self.dataBitsList.setCurrentIndex(3)
+    def showSettingsDialog(self):
+        self.settingsDialog = PortSettings(self.settings)
+        self.settingsDialog.settingsUpdateSignal.connect(self.onSettingsUpdate)
+        self.settingsDialog.exec()
         return
     
-    def updateSettings(self):
-        self.settings['portInfo'] = self.portsInfoList.itemData( int(self.portsInfoList.currentIndex()) )
-        self.settings['name'] = self.settings['portInfo'][0]
+    def selectPortSettings(self):
+        self.portInfo['all'] = self.portsInfoList.itemData( int(self.portsInfoList.currentIndex()) )
+        self.portInfo['name'] = self.portInfo['all'][0]
 
-        self.settings['baudRate'] = self.baudRatesList.itemData( int(self.baudRatesList.currentIndex()) )
-        self.settings['dataBits'] = self.dataBitsList.itemData( int(self.dataBitsList.currentIndex()) )
-        self.settings['parity'] = QtSerialPort.QSerialPort.NoParity
-        self.settings['stopBits'] = QtSerialPort.QSerialPort.OneStop
-        self.settings['flowControl'] = QtSerialPort.QSerialPort.NoFlowControl
+    def onSettingsUpdate(self):
+        self.settingsUpdateSignal.emit()
         return
