@@ -2,15 +2,6 @@
 
 Cross platform serial communication desktop interface
 
-# :construction: TODO
-- [x] Port listing
-- [x] Comms options
-- [x] Port Opening
-- [x] Port read
-- [x] Port write
-- [x] Formatting output
-- [ ] Styling
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -50,7 +41,7 @@ Run program to ensure no errors (while in the Sermon directory)
 
 ```bash
 # Sermon/
-python3 -m sermon.main
+python3 -m sermon
 ```
 
 Test system by connecting a serial device (e.g Arduino). Clicking refresh should display the name of the connected device in the drop-down.
@@ -58,12 +49,12 @@ Test system by connecting a serial device (e.g Arduino). Clicking refresh should
 ## Built With
 
 * [Qt](http://doc.qt.io/) - The base framework used
-* [PyQt](https://www.riverbankcomputing.com/software/pyqt/intro) - Development language used
+* [PyQt](https://www.riverbankcomputing.com/software/pyqt/intro) - Development framework used
 * [PySerial](https://pythonhosted.org/pyserial/index.html) - Used to communicate with serial devices
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/eeshiken/Sermon/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/eeshiken/Sermon/tags).
 
 ## License
 
